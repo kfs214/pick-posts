@@ -61,7 +61,7 @@ export const pickPosts = async (args: PickPostsArgs) => {
         .offset(pickedOffset)
         .get()
         .catch((e) => {
-          console.log(e);
+          console.error(e);
           return;
         })
     )

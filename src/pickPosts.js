@@ -55,7 +55,7 @@ const pickPosts = (args) => __awaiter(void 0, void 0, void 0, function* () {
             .offset(pickedOffset)
             .get()
             .catch((e) => {
-            console.log(e);
+            console.error(e);
             return;
         });
     })));

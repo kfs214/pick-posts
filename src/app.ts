@@ -1,3 +1,5 @@
+import * as fs from 'fs';
+
 import { pickPosts } from './pickPosts';
 import { composeText } from './composeText';
 
@@ -14,9 +16,15 @@ const app = async () => {
     return;
   }
 
-  const composedText = composeText({ heading, posts });
+  const composedTextStringified = JSON.stringify(composeText({ heading, posts }));
+  try {
+    console.log('writing to output.txt...');
+    fs.writeFileSync('output.txt', composedTextStringified);
+  } catch (error) {
+    console.error(error);
+  }
 
-  console.log(composedText);
+  console.log('completed!');
 };
 
 app();
