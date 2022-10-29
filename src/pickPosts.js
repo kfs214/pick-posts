@@ -50,13 +50,12 @@ const pickPosts = (args) => __awaiter(void 0, void 0, void 0, function* () {
     console.log('matched posts:', totalPosts);
     const pickedOffsets = getPickedOffsets(totalPosts, pickedPostLimit);
     const posts = yield Promise.all(pickedOffsets.map((pickedOffset) => __awaiter(void 0, void 0, void 0, function* () {
-        return wpPostsRequest
+        return yield wpPostsRequest
             .param({ _fields: ['title', 'link'] })
             .offset(pickedOffset)
             .get()
             .catch((e) => {
             console.error(e);
-            return;
         });
     })));
     return posts

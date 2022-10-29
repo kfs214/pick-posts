@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import { pickPosts } from './pickPosts';
 import { composeText } from './composeText';
 
-const app = async () => {
+const app = async (): Promise<void> => {
   const [endpoint, heading, postLimit, ...categoriesArg] = process.argv.slice(2);
   const posts = await pickPosts({
     endpoint,
@@ -27,4 +27,4 @@ const app = async () => {
   console.log('completed!');
 };
 
-app();
+void app();
