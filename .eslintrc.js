@@ -17,6 +17,7 @@ module.exports = {
       {
         allowNumber: true,
         allowNullableString: true,
+        allowNullableNumber: true,
       },
     ],
   },

@@ -8,7 +8,7 @@ type PickPostsArgs = {
 
 const MAX_POST_LENGTH = 100;
 
-const getPickedPostLimit = (inputPostLimit?: number) => {
+const getPickedPostLimit = (inputPostLimit?: number): number => {
   if (inputPostLimit === 0) return 0;
   if (!inputPostLimit) return 1;
   if (inputPostLimit > MAX_POST_LENGTH) {
@@ -18,7 +18,7 @@ const getPickedPostLimit = (inputPostLimit?: number) => {
   return inputPostLimit;
 };
 
-const getPickedOffsets = (totalPosts: number, length: number) => {
+const getPickedOffsets = (totalPosts: number, length: number): number[] => {
   const candidates = [...Array(totalPosts).keys()];
 
   if (totalPosts <= length) {
@@ -38,7 +38,14 @@ const getPickedOffsets = (totalPosts: number, length: number) => {
   return pickedOffsets;
 };
 
-export const pickPosts = async (args: PickPostsArgs) => {
+export const pickPosts = async (
+  args: PickPostsArgs
+): Promise<
+  Array<{
+    link: any;
+    title: any;
+  }>
+> => {
   const { endpoint, categories, postLimit } = args;
   const wp = new WPAPI({ endpoint });
 
@@ -55,15 +62,15 @@ export const pickPosts = async (args: PickPostsArgs) => {
   const pickedOffsets = getPickedOffsets(totalPosts, pickedPostLimit);
 
   const posts = await Promise.all(
-    pickedOffsets.map(async (pickedOffset) =>
-      wpPostsRequest
-        .param({ _fields: ['title', 'link'] })
-        .offset(pickedOffset)
-        .get()
-        .catch((e) => {
-          console.error(e);
-          return;
-        })
+    pickedOffsets.map(
+      async (pickedOffset) =>
+        await wpPostsRequest
+          .param({ _fields: ['title', 'link'] })
+          .offset(pickedOffset)
+          .get()
+          .catch((e) => {
+            console.error(e);
+          })
     )
   );
 
