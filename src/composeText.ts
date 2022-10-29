@@ -1,12 +1,12 @@
 type Args = {
   heading?: string;
-  posts: {
+  posts: Array<{
     title: string;
     link: string;
-  }[];
+  }>;
 };
 
-export const composeText = (args: Args) => {
+export const composeText = (args: Args): string => {
   const { heading, posts } = args;
 
   const postsStringified = posts.map(({ title, link }) => `${title}\n${link}`).join('\n\n');

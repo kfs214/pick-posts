@@ -16,6 +16,7 @@ module.exports = {
       'warn',
       {
         allowNumber: true,
+        allowNullableString: true,
       },
     ],
   },
