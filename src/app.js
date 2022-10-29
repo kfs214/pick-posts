@@ -56,4 +56,4 @@ const app = () => __awaiter(void 0, void 0, void 0, function* () {
     }
     console.log('completed!');
 });
-app();
+void app();
