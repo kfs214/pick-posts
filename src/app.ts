@@ -3,12 +3,35 @@ import * as fs from 'fs';
 import { pickPosts } from './pickPosts';
 import { composeText } from './composeText';
 
+const getProperties = () => {
+  const endpoint = PropertiesService.getScriptProperties().getProperty('endpoint');
+
+  const heading = PropertiesService.getScriptProperties().getProperty('heading') ?? '';
+
+  const postLimitProperty = PropertiesService.getScriptProperties().getProperty('postLimit') ?? '';
+  const postLimit = isNaN(+postLimitProperty) ? 1 : +postLimitProperty;
+
+  const categoriesProperty =
+    PropertiesService.getScriptProperties().getProperty('categories') ?? '';
+  const categories = categoriesProperty
+    .split(' ')
+    .map((categoryStr) => +categoryStr)
+    .filter((e) => !isNaN(e));
+
+  return { endpoint, heading, postLimit, categories };
+};
+
 const app = async (): Promise<void> => {
-  const [endpoint, heading, postLimit, ...categoriesArg] = process.argv.slice(2);
+  const { endpoint, heading, postLimit, categories } = getProperties();
+  if (!endpoint) {
+    console.log('endpoint is missing. ending process...');
+    return;
+  }
+
   const posts = await pickPosts({
     endpoint,
-    postLimit: isNaN(+postLimit) ? 1 : +postLimit,
-    categories: categoriesArg.map((categoryStr) => +categoryStr).filter((e) => !isNaN(e)),
+    postLimit,
+    categories,
   });
 
   if (!posts.length) {

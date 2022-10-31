@@ -11,6 +11,7 @@ module.exports = {
     project: ['./tsconfig.json'],
   },
   rules: {
+    '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
     '@typescript-eslint/strict-boolean-expressions': [
       'warn',
