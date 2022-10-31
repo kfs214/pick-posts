@@ -1,5 +1,4 @@
-import * as fs from 'fs';
-
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { pickPosts } from './pickPosts';
 import { composeText } from './composeText';
 
@@ -7,6 +6,8 @@ const getProperties = () => {
   const endpoint = PropertiesService.getScriptProperties().getProperty('endpoint');
 
   const heading = PropertiesService.getScriptProperties().getProperty('heading') ?? '';
+
+  const footer = PropertiesService.getScriptProperties().getProperty('footer') ?? '';
 
   const postLimitProperty = PropertiesService.getScriptProperties().getProperty('postLimit') ?? '';
   const postLimit = isNaN(+postLimitProperty) ? 1 : +postLimitProperty;
@@ -18,13 +19,18 @@ const getProperties = () => {
     .map((categoryStr) => +categoryStr)
     .filter((e) => !isNaN(e));
 
-  return { endpoint, heading, postLimit, categories };
+  const subject = PropertiesService.getScriptProperties().getProperty('subject') ?? '';
+  const address = PropertiesService.getScriptProperties().getProperty('address');
+
+  return { endpoint, address, subject, heading, postLimit, categories, footer };
 };
 
 const app = async (): Promise<void> => {
-  const { endpoint, heading, postLimit, categories } = getProperties();
-  if (!endpoint) {
-    console.log('endpoint is missing. ending process...');
+  const { endpoint, address, subject, heading, postLimit, categories, footer } = getProperties();
+  if (!endpoint || !address) {
+    console.log(
+      `${endpoint ? '' : 'endpoint'}${address ? '' : 'address'} is missing. ending process...`
+    );
     return;
   }
 
@@ -39,10 +45,10 @@ const app = async (): Promise<void> => {
     return;
   }
 
-  const composedTextStringified = JSON.stringify(composeText({ heading, posts }));
+  const composedTextStringified = JSON.stringify(composeText({ heading, posts, footer }));
   try {
-    console.log('writing to output.txt...');
-    fs.writeFileSync('output.txt', composedTextStringified);
+    console.log('sending e-mail...');
+    GmailApp.sendEmail(address, subject, composedTextStringified);
   } catch (error) {
     console.error(error);
   }

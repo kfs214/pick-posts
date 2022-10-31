@@ -9,7 +9,7 @@ pick post(s) from wordpress
 ### command
 
 ```
-node ./src/app.js ${https://your.doimain/wp-json} ${heading} ${max length of picked posts} ${categories, space separeted}
+node ./src/zapp.js ${https://your.doimain/wp-json} ${heading} ${max length of picked posts} ${categories, space separeted}
 ```
 
 #### note
@@ -20,7 +20,7 @@ As the maximum posts per request is limited to 100 by WordPress API,
 ### command example
 
 ```
-node ./src/app.js https://your.doimain/wp-json recommended posts 1 2 3
+node ./src/zapp.js https://your.doimain/wp-json recommended posts 1 2 3
 ```
 
 ### output

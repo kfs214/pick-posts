@@ -2,14 +2,14 @@
   "name": "pick-posts",
   "version": "1.0.0",
   "description": "pick some posts from wordpress",
-  "main": "src/app.js",
+  "main": "src/zapp.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "push": "clasp push",
     "open": "clasp open",
     "build": "tsc --build",
     "clean": "tsc --build --clean",
-    "start": "ts-node src/app.ts"
+    "start": "ts-node src/zapp.ts"
   },
   "keywords": [],
   "author": "Kazuki USHIJIMA",
