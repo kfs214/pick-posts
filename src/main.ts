@@ -67,10 +67,11 @@ export const main = async (): Promise<void> => {
     return;
   }
 
-  const composedTextStringified = JSON.stringify(composeText({ heading, posts, footer }));
+  const composedText = composeText({ heading, posts, footer });
+  console.log('composedTextStringified', composedText);
   try {
     console.log('sending e-mail...');
-    GmailApp.sendEmail(address, subject, composedTextStringified);
+    GmailApp.sendEmail(address, subject, composedText);
   } catch (error) {
     console.error(error);
   }
