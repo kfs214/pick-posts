@@ -20,12 +20,11 @@ const CATEGORIES = 'categories';
 const buildURL = (params: PickPostsArgs) => {
   const { apiEndpoint, categories, wpEndpoint: endpoint, postLimit } = params;
 
-  // TODO categories反映できている？
   const categoryEntries: ParamsObjectEntry[] = categories
     ? categories.map((category) => [CATEGORIES, category])
     : [];
   const restSearchParamEntries = Object.entries({ endpoint, 'post-limit': postLimit });
-  const sarchParamEntries = [...categoryEntries, ...restSearchParamEntries].filter((_, v) => v);
+  const sarchParamEntries = [...categoryEntries, ...restSearchParamEntries].filter(([_, v]) => v);
 
   if (!sarchParamEntries.length) return apiEndpoint;
 
