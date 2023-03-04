@@ -55,7 +55,7 @@ export const main = async (): Promise<void> => {
     return;
   }
 
-  const posts = await pickPosts({
+  const posts = pickPosts({
     wpEndpoint,
     apiEndpoint,
     postLimit,
