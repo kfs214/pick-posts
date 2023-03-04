@@ -2,15 +2,22 @@
 import { pickPosts } from './pickPosts';
 import { composeText } from './composeText';
 
-const getProperties = () => {
-  const endpoint = PropertiesService.getScriptProperties().getProperty('endpoint');
+const parsePostLimitParam = (postLimitParam?: string) => {
+  // nullishな場合は1。0も無効値なので1。
+  if (!postLimitParam) return 1;
+  if (isNaN(+postLimitParam)) return 1;
+  return +postLimitParam;
+};
 
+const getProperties = () => {
+  const wpEndpoint = PropertiesService.getScriptProperties().getProperty('wpEndpoint');
+  const apiEndpoint = PropertiesService.getScriptProperties().getProperty('apiEndpoint');
   const heading = PropertiesService.getScriptProperties().getProperty('heading') ?? '';
 
   const footer = PropertiesService.getScriptProperties().getProperty('footer') ?? '';
 
   const postLimitProperty = PropertiesService.getScriptProperties().getProperty('postLimit') ?? '';
-  const postLimit = isNaN(+postLimitProperty) ? 1 : +postLimitProperty;
+  const postLimit = parsePostLimitParam(postLimitProperty);
 
   const categoriesProperty =
     PropertiesService.getScriptProperties().getProperty('categories') ?? '';
@@ -22,20 +29,35 @@ const getProperties = () => {
   const subject = PropertiesService.getScriptProperties().getProperty('subject') ?? '';
   const address = PropertiesService.getScriptProperties().getProperty('address');
 
-  return { endpoint, address, subject, heading, postLimit, categories, footer };
+  return { wpEndpoint, apiEndpoint, address, subject, heading, postLimit, categories, footer };
 };
 
-const app = async (): Promise<void> => {
-  const { endpoint, address, subject, heading, postLimit, categories, footer } = getProperties();
-  if (!endpoint || !address) {
+export const main = async (): Promise<void> => {
+  const { wpEndpoint, apiEndpoint, address, subject, heading, postLimit, categories, footer } =
+    getProperties();
+  console.log('starting process...', {
+    wpEndpoint,
+    apiEndpoint,
+    address,
+    subject,
+    heading,
+    postLimit,
+    categories,
+    footer,
+  });
+
+  if (!wpEndpoint || !apiEndpoint || !address) {
     console.log(
-      `${endpoint ? '' : 'endpoint'}${address ? '' : 'address'} is missing. ending process...`
+      `missing required property(ies):${wpEndpoint ? '' : ' wpEndpoint'}${
+        apiEndpoint ? '' : ' apiEndpoint'
+      }${address ? '' : ' address'}. ending process...`
     );
     return;
   }
 
   const posts = await pickPosts({
-    endpoint,
+    wpEndpoint,
+    apiEndpoint,
     postLimit,
     categories,
   });
@@ -55,5 +77,3 @@ const app = async (): Promise<void> => {
 
   console.log('completed!');
 };
-
-void app();
