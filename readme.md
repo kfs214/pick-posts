@@ -1,5 +1,7 @@
 # pick posts
 
+**_this repository is archived and merged to [kfs214/chigusa-iro](https://github.com/kfs214/chigusa-iro)_**
+
 - [pick posts](#pick-posts)
   - [purpose](#purpose)
   - [requirements](#requirements)
