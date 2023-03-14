@@ -4,12 +4,15 @@ type Args = {
     title: string;
     link: string;
   }>;
+  footer?: string;
 };
 
 export const composeText = (args: Args): string => {
-  const { heading, posts } = args;
+  const { heading, posts, footer } = args;
 
   const postsStringified = posts.map(({ title, link }) => `${title}\n${link}`).join('\n\n');
 
-  return `${heading ? heading + '\n\n\n' : ''}${postsStringified}`;
+  return `${heading ? heading + '\n\n\n' : ''}${postsStringified}${
+    footer ? '\n\n\n' + footer : ''
+  }`;
 };
